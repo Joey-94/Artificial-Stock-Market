@@ -1,2 +1,0 @@
-Corporation,1
-HBPlayer,1500
