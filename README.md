@@ -14,8 +14,7 @@ The engine has carried two research applications:
   trading rules and used to stress-test four proposed redesigns of the effective bidding
   range — the rule restricting limit-order prices to a band around prevailing
   quotes. The study was written up as SZSE internal research
-  report No. 378 on the effective bidding range (Dec 2020), a collaboration
-  with researchers at the institute.
+  report, a collaboration with researchers at the institute.
 - **Strategic corporate disclosure (this snapshot).** A listed-firm agent
   learns, by reinforcement, whether to report earnings truthfully or manage
   them, and heterogeneously sophisticated investors trade on the reports.
