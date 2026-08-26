@@ -13,9 +13,9 @@ The engine has carried two research applications:
 - **Effective-bidding-range policy study (SZSE Research Institute).** During my internship, the engine was configured to replicate ChiNext
   trading rules and used to stress-test four proposed redesigns of the effective bidding
   range — the rule restricting limit-order prices to a band around prevailing
-  quotes. The study was written up as SZSE internal research
-  report No. 378 on the effective bidding range (Dec 2020), a collaboration
-  with researchers at the institute. A runnable public reimplementation of
+  quotes. The study was written up as the SZSE internal research report
+  *Research on Optimizing the Effective Bidding Range Mechanism in China's A-Share Market*
+  (Dec 2020), a collaboration with researchers at the institute. A runnable public reimplementation of
   the report's model and experiments lives in [`replication/`](replication/).
 - **Strategic corporate disclosure (this snapshot).** A listed-firm agent
   learns, by reinforcement, whether to report earnings truthfully or manage
@@ -25,8 +25,7 @@ The engine has carried two research applications:
 heterogeneous-belief trader) and `Corporation` (the learning disclosure agent)
 — are my implementation. The market infrastructure (MASON scheduling, the
 double-auction order book, the fundamental-value process, logging) is the
-research group's existing codebase, which I studied and extended. The full
-source is shared lab infrastructure and is available on request.
+research group's existing codebase, which I studied and extended.
 
 ---
 

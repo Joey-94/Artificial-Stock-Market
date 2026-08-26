@@ -1,8 +1,8 @@
 # Replication: the effective-bidding-range experiments
 
 This folder is a **public reimplementation**, in Python, of the
-artificial-stock-market model specified in the model-design appendix of SZSE
-internal research report No. 378 on the effective bidding range (Dec 2020).
+artificial-stock-market model specified in the model-design appendix of the SZSE internal research
+report *Research on Optimizing the Effective Bidding Range Mechanism in China's A-Share Market* (Dec 2020).
 The original experiment code remains at the institute; this reimplementation
 was written from the report's published equations and mechanism descriptions
 so that the study's design — and its central result — can be inspected and

@@ -1,7 +1,7 @@
 """
 Public reimplementation of the artificial-stock-market model specified in the
-model-design appendix of SZSE internal research report No. 378 on the
-effective bidding range (Dec 2020).
+model-design appendix of the SZSE internal research report
+"Research on Optimizing the Effective Bidding Range Mechanism in China's A-Share Market" (Dec 2020).
 
 This is a REIMPLEMENTATION written from the report's published model design
 (equations (1)-(19) and the mechanism descriptions), not the original
