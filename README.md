@@ -14,7 +14,9 @@ The engine has carried two research applications:
   trading rules and used to stress-test four proposed redesigns of the effective bidding
   range — the rule restricting limit-order prices to a band around prevailing
   quotes. The study was written up as SZSE internal research
-  report, a collaboration with researchers at the institute.
+  report No. 378 on the effective bidding range (Dec 2020), a collaboration
+  with researchers at the institute. A runnable public reimplementation of
+  the report's model and experiments lives in [`replication/`](replication/).
 - **Strategic corporate disclosure (this snapshot).** A listed-firm agent
   learns, by reinforcement, whether to report earnings truthfully or manage
   them, and heterogeneously sophisticated investors trade on the reports.
@@ -47,22 +49,33 @@ no recompilation between experiments.
 
 ## From the report's math to the code
 
-The model design section of the policy report specifies the trader in
-equations. Each maps to a specific site in the code:
+The model-design appendix of the policy report specifies the trader in
+equations. This snapshot is the **later disclosure-study variant** of the
+engine, so the correspondence is structural rather than line-for-line —
+the table marks where the two diverge:
 
-| Report specification | Code |
+| Report specification | This codebase |
 |---|---|
-| Eq. (1) chartist-strength draw, scale g₀ = 0.6 | `main.properties: gc=0.6`; per-agent draws in `HBPlayer.initializeAgent()` |
-| Eq. (2) horizon τᵢ shrinks with chartist strength (τmax = 480) | `main.properties: tau=480`; `this.tau = (int)(baseTau * (1+g1)/(1+g2))` |
-| Eq. (3) market-arrival rate λᵢ = 1/τᵢ, Poisson entry | `this.lambda = 1.0/this.tau`; `randDist.nextPoisson(lambda)` |
-| Eq. (4) ln P̂ = fundamental + noise + chartist momentum | `HBPlayer.getForecastPrice()` |
-| Eq. (5) risk aversion αᵢ inverse in chartist strength | `this.alph = initialAlph * (1+g1)/(1+g2)` |
-| Eqs. (11)–(12) target position W·π/P; order = target − held | `generateOrders()`: `os = (int)(piW/price) - position` |
-| Order-type table (market vs. limit by best quotes) | the four-branch dispatch in `generateOrders()` |
-| Calibration: fat tails, Hurst exponents, ACF decay | `scripts/hurst_exponent.m`, `compareRuns.m` |
+| Eq. (2) horizon τᵢ shrinks with chartist strength (τmax = 480) | same — `tau = baseTau * (1+g1)/(1+g2)`; `main.properties: tau=480` |
+| Eq. (3) market-arrival rate λᵢ = 1/τᵢ, Poisson entry | same — `lambda = 1.0/tau`; `randDist.nextPoisson(lambda)` |
+| Eq. (5) risk aversion αᵢ inverse in chartist strength | same — `alph = initialAlph * (1+g1)/(1+g2)` |
+| Eqs. (11)–(12) target position W·π/P; order = target − held | same — `os = (int)(piW/price) - position` |
+| Order-type table (market vs. limit by best quotes) | same — the four-branch dispatch in `generateOrders()` |
+| Eq. (1) belief-strength draw gcᵢ = 2·g₀·φ, φ ~ U[0,1] | evolved — weights g₁, g₂, gₙ drawn from Laplace distributions, then normalized |
+| Eq. (4) chartist term = past-τ log return | evolved — MA(τ/4) / MA(τ) crossover momentum |
+| Fundamental value: one-tick random walk, σ = 10 bp/min | replaced — discrete earnings announcements per reporting cycle (for the disclosure study) |
+| Calibration: fat tails, Hurst exponents, ACF decay | same scripts — `scripts/hurst_exponent.m`, `compareRuns.m` |
 
-*(This snapshot is the later disclosure-study variant; a few constants differ
-from the effective-bidding-range configuration described in the report.)*
+**Not in this Java snapshot** (they belong to the policy-study configuration
+at the institute): the effective-bidding-range admission rules themselves,
+T+1 enforcement, and the 30% / 60% intraday halt lines used in the report's
+experiments. All of them are implemented in the Python reimplementation
+under [`replication/`](replication/), which re-runs the three experiments
+and reproduces the report's central result.
+
+**In this snapshot but not in the report**: the `Corporation` disclosure
+agent, discrete earnings announcements, and the "big bath" constraint —
+these belong to the later research line.
 
 ### The forecast rule
 
@@ -180,6 +193,8 @@ consistent with A-share data.
 | `src/support/ModelFactory.java` | 209 | reflection-based agent construction |
 | `src/support/Reporter.java` | 212 | tick-level logging |
 | `src/gui/FinancialModelWithUI.java` | 299 | live charts (JFreeChart) |
+| `replication/absm.py` | ~470 | Python reimplementation of the report's model (Eqs. 1–19 + mechanism layer) |
+| `replication/run_experiments.py` | ~110 | re-runs the three bidding-range experiments, writes figures |
 | `scripts/*.m` | — | Hurst, ACF, kernel regression, run comparison |
 
 **Stack:** Java 8 · MASON · SSJ (stochastic simulation) · JFreeChart · MATLAB
